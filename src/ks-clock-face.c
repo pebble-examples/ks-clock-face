@@ -79,9 +79,7 @@ static void update_proc(Layer *layer, GContext *ctx) {
   graphics_context_set_stroke_color(ctx, GColorBlack);
   graphics_context_set_stroke_width(ctx, 4);
 
-  if(ANTIALIASING) {
-    graphics_context_set_antialiased(ctx, true);
-  }
+  graphics_context_set_antialiased(ctx, ANTIALIASING);
 
   // White clockface
   graphics_context_set_fill_color(ctx, GColorWhite);
