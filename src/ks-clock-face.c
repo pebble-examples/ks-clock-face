@@ -138,17 +138,17 @@ static void window_unload(Window *window) {
 
 /*********************************** App **************************************/
 
-static int anim_percentage(uint32_t dist_normalized, int max) {
+static int anim_percentage(AnimationProgress dist_normalized, int max) {
   return (int)(float)(((float)dist_normalized / (float)ANIMATION_NORMALIZED_MAX) * (float)max);
 }
 
-static void radius_update(Animation *anim, uint32_t dist_normalized) {
+static void radius_update(Animation *anim, AnimationProgress dist_normalized) {
   s_radius = anim_percentage(dist_normalized, FINAL_RADIUS);
 
   layer_mark_dirty(s_canvas_layer);
 }
 
-static void hands_update(Animation *anim, uint32_t dist_normalized) {
+static void hands_update(Animation *anim, AnimationProgress dist_normalized) {
   s_anim_time.hours = anim_percentage(dist_normalized, hours_to_minutes(s_last_time.hours));
   s_anim_time.minutes = anim_percentage(dist_normalized, s_last_time.minutes);
 
