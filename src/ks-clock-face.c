@@ -71,9 +71,10 @@ static int hours_to_minutes(int hours_out_of_12) {
 
 static void update_proc(Layer *layer, GContext *ctx) {
   // Color background?
+  GRect bounds = layer_get_bounds(layer);
   if(COLORS) {
     graphics_context_set_fill_color(ctx, GColorFromRGB(s_color_channels[0], s_color_channels[1], s_color_channels[2]));
-    graphics_fill_rect(ctx, GRect(0, 0, 144, 168), 0, GCornerNone);
+    graphics_fill_rect(ctx, bounds, 0, GCornerNone);
   }
 
   graphics_context_set_stroke_color(ctx, GColorBlack);

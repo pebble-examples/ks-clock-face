@@ -6,7 +6,7 @@
   "versionCode": 2,
   "versionLabel": "1.1",
   "sdkVersion": "3",
-  "targetPlatforms": ["basalt"],
+  "targetPlatforms": ["basalt", "chalk"],
   "watchapp": {
     "watchface": true
   },
