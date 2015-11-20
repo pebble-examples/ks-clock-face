@@ -3,10 +3,10 @@
   "shortName": "KS Original",
   "longName": "KS Original",
   "companyName": "Chris Lewis",
-  "versionCode": 2,
-  "versionLabel": "1.1",
+  "versionCode": 3,
+  "versionLabel": "1.2",
   "sdkVersion": "3",
-  "targetPlatforms": ["basalt", "chalk"],
+  "targetPlatforms": ["aplite", "basalt", "chalk"],
   "watchapp": {
     "watchface": true
   },
