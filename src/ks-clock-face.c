@@ -1,6 +1,6 @@
 #include <pebble.h>
 
-#define COLORS       true
+#define COLORS       PBL_IF_COLOR_ELSE(true, false)
 #define ANTIALIASING true
 
 #define HAND_MARGIN  10
@@ -116,7 +116,7 @@ static void update_proc(Layer *layer, GContext *ctx) {
   // Draw hands with positive length only
   if(s_radius > 2 * HAND_MARGIN) {
     graphics_draw_line(ctx, s_center, hour_hand);
-  } 
+  }
   if(s_radius > HAND_MARGIN) {
     graphics_draw_line(ctx, s_center, minute_hand);
   }
