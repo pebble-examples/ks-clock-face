@@ -74,8 +74,10 @@ static void update_proc(Layer *layer, GContext *ctx) {
   GRect bounds = layer_get_bounds(layer);
   if(COLORS) {
     graphics_context_set_fill_color(ctx, GColorFromRGB(s_color_channels[0], s_color_channels[1], s_color_channels[2]));
-    graphics_fill_rect(ctx, bounds, 0, GCornerNone);
+  } else {
+    graphics_context_set_fill_color(ctx, GColorDarkGray);
   }
+  graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 
   graphics_context_set_stroke_color(ctx, GColorBlack);
   graphics_context_set_stroke_width(ctx, 4);
