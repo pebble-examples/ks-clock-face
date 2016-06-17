@@ -70,7 +70,6 @@ static int prv_hours_to_minutes(int hours_out_of_12) {
 }
 
 static void prv_update_proc(Layer *layer, GContext *ctx) {
-  //APP_LOG(APP_LOG_LEVEL_DEBUG, "prv_update_proc()");
   GRect bounds = layer_get_unobstructed_bounds(layer);
   s_center = grect_center_point(&bounds);
 
@@ -145,60 +144,34 @@ static void prv_hands_update(Animation *anim, AnimationProgress dist_normalized)
 }
 
 static void prv_start_animation() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "prv_start_animation()");
-
   // Prepare animations
-  AnimationImplementation radius_impl = {
+  static AnimationImplementation s_radius_impl = {
     .update = prv_radius_update
   };
-  prv_animate(ANIMATION_DURATION, ANIMATION_DELAY, &radius_impl, false);
+  prv_animate(ANIMATION_DURATION, ANIMATION_DELAY, &s_radius_impl, false);
 
-  AnimationImplementation hands_impl = {
+  static AnimationImplementation s_hands_impl = {
     .update = prv_hands_update
   };
-  prv_animate(2 * ANIMATION_DURATION, ANIMATION_DELAY, &hands_impl, true);
-
+  prv_animate(2 * ANIMATION_DURATION, ANIMATION_DELAY, &s_hands_impl, true);
 }
 
 static void prv_create_canvas() {
-
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "prv_create_canvas()");
   Layer *window_layer = window_get_root_layer(s_main_window);
   GRect window_bounds = layer_get_unobstructed_bounds(window_layer);
-
   s_canvas_layer = layer_create(window_bounds);
   layer_set_update_proc(s_canvas_layer, prv_update_proc);
   layer_add_child(window_layer, s_canvas_layer);
 }
 
-static void prv_window_load(Window *window) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "prv_window_load()");
-  prv_create_canvas();
-  //
-  tick_timer_service_subscribe(MINUTE_UNIT, prv_tick_handler);
-
-}
-
-static void prv_window_unload(Window *window) {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "prv_window_unload()");
-  layer_destroy(s_canvas_layer);
-}
-
 /*********************************** App **************************************/
-
-
-
-
 
 // Event fires once, before the obstruction appears or disappears
 static void prv_unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {
   if(s_animating) {
     return;
   }
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "will_change()");
-
-  tick_timer_service_unsubscribe();
-
+  // Reset the clock animation
   s_radius = 0;
   s_anim_hours_60 = 0;
 }
@@ -208,19 +181,31 @@ static void prv_unobstructed_did_change(void *context) {
   if(s_animating) {
     return;
   }
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "did_change()");
+  // Play the clock animation
+  prv_start_animation();
+}
+
+static void prv_window_load(Window *window) {
+  prv_create_canvas();
 
   prv_start_animation();
 
   tick_timer_service_subscribe(MINUTE_UNIT, prv_tick_handler);
+
+  // Subscribe to the unobstructed area events
+  UnobstructedAreaHandlers handlers = {
+    .will_change = prv_unobstructed_will_change,
+    .did_change = prv_unobstructed_did_change
+  };
+  unobstructed_area_service_subscribe(handlers, NULL);
+}
+
+static void prv_window_unload(Window *window) {
+  layer_destroy(s_canvas_layer);
 }
 
 static void prv_init() {
-  APP_LOG(APP_LOG_LEVEL_DEBUG, "prv_init()");
-
   srand(time(NULL));
-
-  light_enable(true);
 
   time_t t = time(NULL);
   struct tm *time_now = localtime(&t);
@@ -232,16 +217,6 @@ static void prv_init() {
     .unload = prv_window_unload,
   });
   window_stack_push(s_main_window, true);
-
-  // Subscribe to the unobstructed area events
-  UnobstructedAreaHandlers handlers = {
-    .will_change = prv_unobstructed_will_change,
-    .did_change = prv_unobstructed_did_change
-  };
-  unobstructed_area_service_subscribe(handlers, NULL);
-
-  prv_start_animation();
-
 }
 
 static void prv_deinit() {
