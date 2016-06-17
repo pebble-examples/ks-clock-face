@@ -5,6 +5,6 @@ from a dot, sweeping the clock arms as it does so.
 
 ![](screenshots/screenshot-bw.png)
 
-Change `COLOR` to `true` and re-compile for a splash of color.
+Automatically detects if the Pebble is capable of color.
 
 ![](screenshots/screenshot-color.png)
