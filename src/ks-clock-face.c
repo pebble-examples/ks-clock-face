@@ -66,10 +66,11 @@ static void prv_tick_handler(struct tm *tick_time, TimeUnits changed) {
 }
 
 static int prv_hours_to_minutes(int hours_out_of_12) {
-  return (int)(float)(((float)hours_out_of_12 / 12.0F) * 60.0F);
+  return hours_out_of_12 * 60 / 12;
 }
 
 static void prv_update_proc(Layer *layer, GContext *ctx) {
+  GRect full_bounds = layer_get_unobstructed_bounds(layer);
   GRect bounds = layer_get_unobstructed_bounds(layer);
   s_center = grect_center_point(&bounds);
 
@@ -79,7 +80,7 @@ static void prv_update_proc(Layer *layer, GContext *ctx) {
   } else {
     graphics_context_set_fill_color(ctx, GColorDarkGray);
   }
-  graphics_fill_rect(ctx, bounds, 0, GCornerNone);
+  graphics_fill_rect(ctx, full_bounds, 0, GCornerNone);
 
   graphics_context_set_stroke_color(ctx, GColorBlack);
   graphics_context_set_stroke_width(ctx, 4);
@@ -127,7 +128,7 @@ static void prv_update_proc(Layer *layer, GContext *ctx) {
 }
 
 static int prv_anim_percentage(AnimationProgress dist_normalized, int max) {
-  return (int)(float)(((float)dist_normalized / (float)ANIMATION_NORMALIZED_MAX) * (float)max);
+  return (int)(dist_normalized * max / ANIMATION_NORMALIZED_MAX);
 }
 
 static void prv_radius_update(Animation *anim, AnimationProgress dist_normalized) {
@@ -158,8 +159,8 @@ static void prv_start_animation() {
 
 static void prv_create_canvas() {
   Layer *window_layer = window_get_root_layer(s_main_window);
-  GRect window_bounds = layer_get_unobstructed_bounds(window_layer);
-  s_canvas_layer = layer_create(window_bounds);
+  GRect bounds = layer_get_unobstructed_bounds(window_layer);
+  s_canvas_layer = layer_create(bounds);
   layer_set_update_proc(s_canvas_layer, prv_update_proc);
   layer_add_child(window_layer, s_canvas_layer);
 }
