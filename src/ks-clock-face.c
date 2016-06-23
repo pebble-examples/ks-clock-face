@@ -70,7 +70,7 @@ static int prv_hours_to_minutes(int hours_out_of_12) {
 }
 
 static void prv_update_proc(Layer *layer, GContext *ctx) {
-  GRect full_bounds = layer_get_unobstructed_bounds(layer);
+  GRect full_bounds = layer_get_bounds(layer);
   GRect bounds = layer_get_unobstructed_bounds(layer);
   s_center = grect_center_point(&bounds);
 
