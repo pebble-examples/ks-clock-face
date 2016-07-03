@@ -8,3 +8,5 @@ from a dot, sweeping the clock arms as it does so.
 Automatically detects if the Pebble is capable of color.
 
 ![](screenshots/screenshot-color.png)
+
+Requires SDK4.
