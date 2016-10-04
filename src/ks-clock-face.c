@@ -1,18 +1,20 @@
 #include <pebble.h>
 
-#define COLORS       PBL_IF_COLOR_ELSE(true, false)
+#define COLORS PBL_IF_COLOR_ELSE(true, false)
 #define ANTIALIASING true
 
-#define HAND_MARGIN  10
+#define HAND_MARGIN 10
 
-#if defined PBL_PLATFORM_EMERY
+#if PBL_DISPLAY_WIDTH == 200
   #define FINAL_RADIUS 86
+#elif PBL_DISPLAY_WIDTH == 180
+  #define FINAL_RADIUS 74
 #else
   #define FINAL_RADIUS 55
 #endif
 
 #define ANIMATION_DURATION 500
-#define ANIMATION_DELAY    600
+#define ANIMATION_DELAY 600
 
 typedef struct {
   int hours;
