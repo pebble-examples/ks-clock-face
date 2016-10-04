@@ -4,7 +4,12 @@
 #define ANTIALIASING true
 
 #define HAND_MARGIN  10
-#define FINAL_RADIUS 55
+
+#if defined PBL_PLATFORM_EMERY
+  #define FINAL_RADIUS 86
+#else
+  #define FINAL_RADIUS 55
+#endif
 
 #define ANIMATION_DURATION 500
 #define ANIMATION_DELAY    600
