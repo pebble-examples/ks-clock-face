@@ -1,17 +1,14 @@
 #include <pebble.h>
 
-#define COLORS       PBL_IF_COLOR_ELSE(true, false)
+#define COLORS PBL_IF_COLOR_ELSE(true, false)
 #define ANTIALIASING true
-
-#define HAND_MARGIN  10
-#define FINAL_RADIUS 55
-
+#define HAND_MARGIN 10
 #define ANIMATION_DURATION 500
-#define ANIMATION_DELAY    600
+#define ANIMATION_DELAY 600
 
 typedef struct {
-  int hours;
-  int minutes;
+  uint8_t hours;
+  uint8_t minutes;
 } Time;
 
 static Window *s_main_window;
@@ -19,7 +16,8 @@ static Layer *s_canvas_layer;
 
 static GPoint s_center;
 static Time s_last_time, s_anim_time;
-static int s_radius = 0, s_anim_hours_60 = 0, s_color_channels[3];
+static uint8_t s_radius = 0, s_anim_hours_60 = 0, s_color_channels[3];
+static uint8_t s_radius_final;
 static bool s_animating = false;
 
 /*************************** AnimationImplementation **************************/
@@ -132,7 +130,7 @@ static int prv_anim_percentage(AnimationProgress dist_normalized, int max) {
 }
 
 static void prv_radius_update(Animation *anim, AnimationProgress dist_normalized) {
-  s_radius = prv_anim_percentage(dist_normalized, FINAL_RADIUS);
+  s_radius = prv_anim_percentage(dist_normalized, s_radius_final);
 
   layer_mark_dirty(s_canvas_layer);
 }
@@ -160,6 +158,9 @@ static void prv_start_animation() {
 static void prv_create_canvas() {
   Layer *window_layer = window_get_root_layer(s_main_window);
   GRect bounds = layer_get_unobstructed_bounds(window_layer);
+
+  s_radius_final = (bounds.size.w - 30) / 2;
+
   s_canvas_layer = layer_create(bounds);
   layer_set_update_proc(s_canvas_layer, prv_update_proc);
   layer_add_child(window_layer, s_canvas_layer);
