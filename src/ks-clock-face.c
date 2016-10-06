@@ -159,13 +159,7 @@ static void prv_create_canvas() {
   Layer *window_layer = window_get_root_layer(s_main_window);
   GRect bounds = layer_get_unobstructed_bounds(window_layer);
 
-  if(bounds.size.w >= 200) {
-    s_radius_final = 86;
-  } else if (bounds.size.w == 180) {
-    s_radius_final = 74;
-  } else {
-    s_radius_final = 55;
-  }
+  s_radius_final = (bounds.size.w - 30) / 2;
 
   s_canvas_layer = layer_create(bounds);
   layer_set_update_proc(s_canvas_layer, prv_update_proc);
